@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visionary_voices/screens/dashboard.dart';
 import 'package:visionary_voices/screens/signup_screen.dart';
 import '../theme/theme.dart';
 import '../widgets/custom_scaffold.dart';
@@ -158,11 +159,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'),
-                                ),
-                              );
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Singlefilepicker()),);
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   const SnackBar(
+                              //     content: Text('Processing Data'),
+                              //   ),
+                              // );
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -171,41 +173,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: const Text('Sign In'),
                         ),
                       ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              'Sign up with',
-                              style: TextStyle(
-                                color: Colors.black45,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                        ],
-                      ),
+
                       const SizedBox(
                         height: 25.0,
                       ),
@@ -227,8 +198,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   builder: (e) => const SignUpScreen(),
                                 ),
                               );
-                            },
-                            child: Text(
+                            }, child: Text(
                               'Sign up',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
