@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:visionary_voices/screens/dashboard.dart';
 import 'package:visionary_voices/screens/signup_screen.dart';
@@ -12,10 +13,29 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  var auth=FirebaseAuth.instance;
+  login(){
+    auth.authStateChanges().listen((User? user)
+    {
+      if(user!=null && mounted){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context)=>new Singlefilepicker()), (Route <dynamic> route) => false);
+      }
+    }
+    );
+  }
+  @override
+  void initState() {
+  login();
+    super.initState();
+  }
   final _formSignInKey = GlobalKey<FormState>();
   bool rememberPassword = true;
   @override
   Widget build(BuildContext context) {
+Size size = MediaQuery.of(context).size;
+TextEditingController _email=TextEditingController();
+TextEditingController _pwd=TextEditingController();
+
     return CustomScaffold(
     child: Column(
       children: [
@@ -54,6 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
                        height: 40.0,
                      ),
                      TextFormField(
+                       controller: _email,
                        validator: (value){
                          if(value==null || value.isEmpty){
                            return 'Please Enter Email';
@@ -85,6 +106,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 25.0,
                       ),
                       TextFormField(
+                        controller: _pwd,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value){
@@ -156,22 +178,51 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignInKey.currentState!.validate() &&
-                                rememberPassword) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Singlefilepicker()),);
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(
-                              //     content: Text('Processing Data'),
-                              //   ),
-                              // );
-                            } else if (!rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
-                              );
+                          onPressed: () async{
+                            if(_email.text.isEmpty || _pwd.text.isEmpty){
+                              var snackBar = SnackBar(content: Text('Empty Field'),backgroundColor: Colors.red,);
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
+                           else{
+                              try {
+                                final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                    email: _email.text.toString(),
+                                    password: _pwd.text.toString()
+                                );
+                                // if(FirebaseAuth.instance.currentUser!=null){
+                                //   Navigator.push(context, MaterialPageRoute(builder: (context)=>Singlefilepicker()),);
+                                // }
+                                //
+                                // if(FirebaseAuth.instance.currentUser==null){
+                                //   ScaffoldMessenger.of(context).showSnackBar(
+                                //         const SnackBar(
+                                //           content: Text('Create your account'),
+                                //         ),
+                                //       );
+                                //   }
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'user-not-found') {
+                                  print('No user found for that email.');
+                                } else if (e.code == 'wrong-password') {
+                                  print('Wrong password provided for that user.');
+                                }
+                              }
+                            }
+                            // if (_formSignInKey.currentState!.validate() &&
+                            //     rememberPassword) {
+                            //   Navigator.push(context, MaterialPageRoute(builder: (context)=>Singlefilepicker()),);
+                            //   // ScaffoldMessenger.of(context).showSnackBar(
+                            //   //   const SnackBar(
+                            //   //     content: Text('Processing Data'),
+                            //   //   ),
+                            //   // );
+                            // } else if (!rememberPassword) {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content: Text(
+                            //             'Please agree to the processing of personal data')),
+                            //   );
+                            // }
                           },
                           child: const Text('Sign In'),
                         ),

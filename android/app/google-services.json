@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "332657584889",
+    "project_id": "visionary-voices",
+    "storage_bucket": "visionary-voices.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332657584889:android:f77c9150a44fc6cd359028",
+        "android_client_info": {
+          "package_name": "com.example.visionary_voices"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3pRQ7unjaeMaYTHc_Wi1OBJooOXLwS3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
